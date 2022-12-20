@@ -1,7 +1,9 @@
 import { Component,OnInit } from '@angular/core';
 import { Firestore,doc, addDoc, collectionData } from '@angular/fire/firestore';
 import { collection } from '@firebase/firestore';
-import { Observable } from 'rxjs';
+import { WorkBook,WorkSheet,utils,writeFile} from 'xlsx'
+import jsPDF from 'jspdf';
+import html2canvas from 'html2canvas';
 
 @Component({
   selector: 'app-root',
@@ -47,14 +49,33 @@ export class AppComponent implements OnInit{
     
   }, 1000);
   }
-  hideloader() {
+  hideloader():void{
 
     const el:any =  document.getElementById('loader')
         el.style.display = 'none';
 }
-  Showloader(){
+  Showloader():void{
     const el:any = document.getElementById('loader')
         el.style.display = 'inline-flex';
 
+  }
+  Export():void{
+    let ele = document.getElementById('export-table')
+    const ws:WorkSheet = utils.table_to_sheet(ele)
+    const wb: WorkBook = utils.book_new();
+    utils.book_append_sheet(wb, ws, 'Sheet1');
+    writeFile(wb,'ExcelExport.xlsx')
+  }
+  openPDF(): void {
+    let DATA: any = document.getElementById('htmlData');
+    html2canvas(DATA).then((canvas) => {
+      let fileWidth = 200   ;
+      let fileHeight = (canvas.height * fileWidth) / canvas.width;
+      const FILEURI = canvas.toDataURL('image/png');
+      let PDF = new jsPDF('p', 'mm', 'a4');
+      let position = 0
+      PDF.addImage(FILEURI, 'PNG', 0, position, fileWidth, fileHeight);
+      PDF.save('Todo.pdf');
+    })
   }
 }

@@ -118,7 +118,10 @@
                   <button type="button" class="form-control btn btn-success" (click)="submit()">Submit</button>
                 </div>
                 <div class=" form-group col">
-                  <button type="button" class="form-control btn btn-light">Export</button>
+                  <button type="button" class="form-control btn btn-light" (click)="openPDF()">PDF Export</button>
+                </div>
+                <div class=" form-group col">
+                  <button type="button" class="form-control btn btn-light" (click)="Export()">Excel Export</button>
                 </div>
 
               </div>
@@ -134,15 +137,19 @@
 
 </div>
 <div class="p-2  d-flex justify-content-center align-items">
-  <div class="table-responsive w-25 text-center">
-    <table class="table table-fixed fixed_header">
-      <thead>
+  <div class="table-responsive w-50 text-center" id="htmlData">
+    <table  class="table table-fixed table-bordered fixed_header">
+      <tbody id="export-table">
         <tr>
+          <th>#</th>
           <th>Notes</th>
         </tr>
-      </thead>
-      <tbody>
-        <tr *ngFor="let item of data">
+        <tr *ngFor="let item of data; let i = index">
+          <td>
+            <p>
+              {{i+1}}
+            </p>
+          </td>
           <td>
             <p>
               {{item.value}}
